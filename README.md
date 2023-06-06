@@ -1,5 +1,5 @@
 # Reverse Proxy Server
-Very simple reverse proxy server using NodeJS, Express, and Axios.
+Very simple Node.js reverse proxy server using Express, and Axios.
 
 ## Usage:
 ```
