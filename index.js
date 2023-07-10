@@ -1,5 +1,14 @@
+require('dotenv').config({ path: './.env' });
+
 const express = require('express');
 const axios = require('axios');
+const { isLocalHost } = require('./helpers');
+
+const hosts = JSON.parse(process.env.HOSTS || '[]').map((host) => host.toLowerCase());
+
+function isServerHost(host) {
+    return isLocalHost(host) || hosts.includes(host.toLowerCase());
+}
 
 const app = express();
 app.disable('x-powered-by');
@@ -15,7 +24,9 @@ app.use('/proxy/*', function (req, res) {
     console.log('url', url);
 
     const headers = req.headers;
-    headers.host = req.params.host;
+
+    // Only rewrite the host header if the req host does not match the server host
+    if (isServerHost(headers.host)) headers.host = req.params.host;
 
     axios({
         method: req.method,
