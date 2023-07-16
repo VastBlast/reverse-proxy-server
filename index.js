@@ -33,14 +33,15 @@ app.use('/proxy/*', function (req, res) {
         url: url,
         headers: req.headers,
         data: req.body,
-        params: req.query
+        params: req.query,
+        responseType: 'arraybuffer'
     }).then((response) => {
-        res.status(response.status).send(response.data);
+        res.status(response.status).set(response.headers).send(response.data);
     }).catch((err) => {
         res.status(err?.response?.status || 500).send(err?.response?.data);
     });
 });
 
 app.listen(process.env.PORT || 3838, () => {
-    console.log('Server running on: http://localhost:3838');
+    console.log('Server running on: http://127.0.0.1:3838');
 });
